@@ -115,11 +115,15 @@ function isLoggedIn(req, res, next) {
 
 app.get('/login', (req, res) => {
 
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
+    try {
+        if (req.isAuthenticated()) {
+            return res.redirect('/')
+        }
+    
+        res.render('login', { message: req.flash('message'), success: req.flash('success') })
+    } catch (error) {
+        console.log(error);
     }
-
-    res.render('login', { message: req.flash('message'), success: req.flash('success') })
 })
 
 
@@ -160,8 +164,12 @@ app.get('/logout', isLoggedIn, (req, res) => {
 });
 
 app.get('/', async (req, res) => {
-    const user = await User.findById(req.user._id);
-    res.render('index', { user: (req.isAuthenticated() ? req.user : false), image: user.image });
+    if( req.user === undefined) {
+        res.render('index', { user: (req.isAuthenticated() ? req.user : false) });
+    } else {
+        const user = await User.findById(req.user._id);
+        res.render('index', { user: (req.isAuthenticated() ? req.user : false), image: user.image });
+    }
 });
 
 app.get('/classes', isLoggedIn, async (req, res) => {
