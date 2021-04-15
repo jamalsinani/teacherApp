@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>الفصل :
+        <%= userClass.name %>
+    </title>
+
+    <% include ./partials/header.ejs %>
+
+    <style>
+        .row {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .control-btn {
+            margin: 5px;
+        }
+        th {
+            text-align: center;
+            padding: 10px 64px;
+        }
+        td {
+            text-align: center;
+        }
+        td .btn {
+            margin: 2px;
+        }
+        .student-input {
+            width: 30px !important;
+            border-bottom: none !important;
+            text-align: center;
+        }
+        .student-input:focus {
+            border-bottom: lightblue solid 1px;
+        }
+        .input-student-name {
+            text-align: center;
+            width: 200px !important;
+            direction: rtl;
+            border-bottom: none !important;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+    <!-- total += parseInt(getInput(student,student.booklet[col].inputColumns[i]))  -->
+
+    <% function getInput(student,col){
+        if(student.booklet[col].type == 'number'){
+            return student.booklet[col].value
+        }
+        
+        if(student.booklet[col].type == 'avg'){
+            if(!student.booklet[col]){
+                return col
+            }
+            let total = 0
+            for(let i=0;i < student.booklet[col].inputColumns.length;i++){
+                
+                total += parseFloat(getInput(student,student.booklet[col].inputColumns[i]))
+            }
+            return total/student.booklet[col].inputColumns.length
+        }else if(student.booklet[col].type == 'total'){
+            let total = 0
+            if(!student.booklet[col]){
+                return col
+            }
+            for(let i=0;i < student.booklet[col].inputColumns.length;i++){
+                total += parseFloat(getInput(student,student.booklet[col].inputColumns[i])) 
+            }
+            return Math.round(total)
+        }
+    } %>
+</head>
+
+<body>
+
+    <% include ./partials/navbar.ejs %>
+
+    <div class="container">
+
+        <div class="row">
+            <a href="#classModal" class="btn red col l2 s5 control-btn modal-trigger">حذف الفصل</a>
+            <a href="/viewstudents/<%= userClass.id %>" class="btn teal col l2 s5 offset-l3 control-btn"> معاينة الطلاب</a>
+            <a href="/managecolumns/<%= userClass.id %>" class="btn indigo col l2 s5 control-btn">أدارة الأعمدة</a>
+            <a href="/addstudents/<%= userClass.id %>" class="btn green col l2 s5 control-btn">أضافة طلاب</a>
+        </div>
+
+        <div id="classModal" style="direction:rtl;text-align: center" class="modal">
+            <div class="modal-content">
+                <h4>حذف الفصل</h4>
+
+                <p>هل أنت متاكد انك تريد حذف هذا الفصل؟</p>
+
+
+                <div class="row">
+                    <a href="/deleteclass/<%= userClass.id %>" style="margin:5px" class="btn red">تأكيد</a>
+                    <a href="#classModal" style="margin:5px" class="btn green modal-action modal-close">العاء</a>
+                </div>
+            </div>
+        </div>
+
+        <h4>
+            <%= userClass.name %>
+        </h4>
+
+        <div class="row">
+            <form method="POST">
+                <button type="submit" class="btn green col l2 s5 control-btn" formaction="/class/<%= userClass.id %>">
+                    حفظ التغيرات
+                </button>
+            <table style="direction:ltr" id="user-table" class="display right-align">
+                <thead>
+                    <tr>
+                        <th>الخيارات</th>
+                        <% if(userClass.students.length > 0) { %>
+                        <% Object.keys(userClass.students[0].booklet).reverse().forEach((item)=>{ %>
+                        <th>
+                            <%= userClass.students[0].booklet[item].short %>
+                        </th>
+                        <% }) %>
+                        <% } %>
+                        <th>الأسم</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let count = 0 %>
+                    <% userClass.students.forEach((item, index)=>{ %>
+                    <tr>
+                        <!-- <form action="/editstudent/<%= userClass.id %>/<%= count %>" method="POST"> -->
+                            <td>
+                                <a href="#<%= item.id %>" class="btn red modal-trigger"><i class="material-icons">delete</i></a>
+                                <button class="btn green"><i class="material-icons">save</i></button>
+                                <div id="<%= item.id %>" style="direction:rtl" class="modal">
+                                    <div class="modal-content">
+                                        <h4>حذف الطالب</h4>
+                                        <p>هل أنت متاكد انك تريد حذف هذا الطالب؟</p>
+                                        <div class="row">
+                                            <a href="/deletestudent/<%=userClass.id %>/<%= count %>" class="btn red">تأكيد</a>
+                                            <a href="#<%= item.id %>" class="btn green modal-action modal-close">العاء</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <% Object.keys(userClass.students[0].booklet).reverse().forEach((col)=>{ %>
+                            <% if(item.booklet[col].type == 'number'){ %>
+                            <% if(item.booklet[col].value == 'none'){ %>
+                            <td>لم يتم الأدخال</td>
+                            <% }else{ %>
+                            <td>
+                                <input class="student-input" type="text" name="<%= col %>" value="<%= item.booklet[col]['value'] %>"
+                                    required />
+                            </td>
+                            <% } %>
+                            <% } else{ %>
+                            <% let output = getInput(item,col) %>
+                            <td>
+                                <%= output %>
+                            </td>
+                            <% } %>
+                            <% }) %>
+                            <td><input class="input-student-name" type="text" name="name" value="<%= item.name %>"
+                                    required /></td>
+                            <td><h6><%= index + 1 %></h6></td>
+                        <!-- </form> -->
+                    </tr>
+                    <% count ++ %>
+                    <% }) %>
+
+
+                </tbody>
+            </table>
+            
+                </form>
+        </div>
+
+
+    </div>
+
+</body>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.modal').modal({
+        });
+    });
+    $(document).ready(function () {
+        $('#user-table').DataTable({
+            searching: false,
+            ordering: false
+        });
+    });
+</script>
+
+<% if(updated.length > 0) { %>
+<script>
+    M.toast({ html: 'تم التحديث' })
+</script>
+<% } %>
+
+</html>

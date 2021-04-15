@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>تعديل بيانات طالب</title>
+
+    <% include ./partials/header.ejs %>
+
+    <style>
+        body{
+            background: whitesmoke;
+        }
+        .row {
+            margin-top: 20px;
+        }
+
+        .container {
+            margin-top: 7%;
+        }
+
+        .back-btn{
+            margin-left:25px;
+            cursor: pointer;
+        }
+
+        .brand-logo{
+            color:black!important;
+        }
+
+        .dropdown-content li {
+        text-align: center;
+
+    }
+
+    .select-wrapper input.select-dropdown {
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+
+    <nav class="white">
+
+        <div class="nav-wrapper black-text">
+            <a href="#" class="brand-logo center">
+             تعديل بيانات الطالب</a>
+
+            <div class="left back-btn"><i class="material-icons">arrow_back_ios</i></div>
+        </div>
+
+
+    </nav>
+
+    <div class="container">
+
+        <form id="addcolumnform" method="POST">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" name="name" type="text" value="<%=student.name %>" class="validate"
+                        required>
+                    <label for="name"> الأسم</label>
+                </div>
+            </div>
+
+            <% Object.keys(student.booklet).forEach((col)=>{ %>
+
+               <% if(student.booklet[col].type == 'number'){ %>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="c<%= student.booklet[col].id %>" name="<%= col%>" type="text" value="<%=student.booklet[col].value %>" class="validate"
+                                required>
+                            <label for="<%= student.booklet[col].id %>"> <%= col%></label>
+                        </div>
+                    </div>
+               <% } %>
+
+            <% } )%>
+
+
+            <div class="row">
+                <button class="btn col s4 offset-s4 c blue">حفظ</button>
+            </div>
+        </form>
+
+        <input type="hidden" name="classId" value="<%=classId %>" />
+
+    </div>
+
+
+</body>
+
+<script>
+
+    $('.back-btn').click((e) => {
+        let classId = $('input[name="classId"').val();
+        window.location.href = '/class/' + classId;
+    })
+
+</script>
+
+</html>

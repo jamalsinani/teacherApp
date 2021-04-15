@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>أضافة طلاب</title>
+</head>
+
+    <% include ./partials/header.ejs %>
+<body>
+
+    <% include ./partials/navbar.ejs %>
+
+    <div class="container">
+            <div style="margin-top:20px;" class="row">
+            <form class="col s12" method="POST">
+              <div class="row">
+                <div class="input-field col s12">
+                  <textarea name="students" id="textarea1" class="materialize-textarea"></textarea>
+                  <label for="textarea1">أضافة طلاب</label>
+                </div>
+              </div>
+              <button class="btn green">أضافة</button>
+            </form>
+          </div>
+    </div>
+    
+</body>
+</html>

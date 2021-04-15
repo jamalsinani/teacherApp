@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>أدارة الأعمدة</title>
+
+    <% include ./partials/header.ejs %>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+    <style>
+
+        .btn{
+            margin: 5px;
+        }
+
+        th{
+            text-align: center;
+        }
+
+        .row{
+            margin:10px;
+        }
+
+        td{
+            text-align: center
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <%include ./partials/navbar.ejs %>
+
+    <div class="container">
+
+            <div class="row" style="display:flex">
+                    <a href="/addcolumn/<%=userClass.id %>" class="btn green col waves-effect btn">
+                        <i class="material-icons">add</i>
+                            <span style="position: relative;bottom: 5px">أضافة عمود</span>
+                        </a>
+            </div>
+
+            <div class="row">
+                <a href="/class/<%= userClass.id %>"><h5>< <%= userClass.name %></h5></a>
+            </div>
+
+            <table style="direction:ltr" id="user-table" class="display right-align">
+                    <thead>
+                        <tr>             
+                            <th>الخيارات</th>
+                            <th>الوصف</th>
+                            <th>الدرجة</th>
+                            <th>الأختصار</th>
+                            <th>النوع</th>
+                            <th>الأسم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <% columns.forEach((item)=>{ %>
+                                <tr>
+                                    <td>
+                                        <a href="#<%= item.id %>" class="btn red modal-trigger">حذف</a>
+                                        <a href="/editcolumn/<%= userClass.id %>/<%= item.id %>" class="btn green">تعديل</a>
+                                        
+                                        <div id="<%= item.id %>" style="direction:rtl" class="modal">
+                                                <div class="modal-content">
+                                                    <h4>حذف العمود</h4>
+            
+                                                    <p>هل أنت متاكد انك تريد حذف هذا العمود</p>
+            
+            
+                                                    <div class="row">
+                                                        <a href="/deletecolumn/<%= userClass.id %>/<%= item.id %>" class="btn red">تأكيد</a>
+                                                        <a href="#<%= item.id %>" class="btn green modal-action modal-close">العاء</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </td>
+                                    <td>
+                                        <%= item.desc %>
+                                    </td>
+                                    <td>
+                                        <%= item.value %>
+                                    </td>
+                                    <td><%= item.short %></td>
+                                    
+                                    <% if(item.type === 'avg'){ %>
+                                        <td>متوسط</td>
+                                    <%}else if(item.type === 'total'){ %>
+                                        <td>مجموع</td>
+                                   <% }else{ %>
+                                    <td>حقل رقم</td>
+                                    <% } %>
+                                    <td><%= item.name %></td>
+                                </tr>
+        
+                           <% }) %>
+
+                        
+                    </tbody>
+                </table>
+    
+            </div>
+    </div>
+    
+</body>
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#user-table').DataTable({
+            searching:true,
+            ordering:true
+        });
+    });
+
+    $(document).ready(function () {
+        $('.modal').modal({
+        });
+    });
+</script>
+
+<% if(updated.length > 0) { %>
+
+    <script>
+
+        M.toast({ html: 'تم التحديث' })
+
+    </script>
+
+    <% } %>
+</html>

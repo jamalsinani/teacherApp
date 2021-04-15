@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>
+        <%= userClass.name %> -
+        <%= userClass.subject %>
+    </title>
+
+    <link href="https://fonts.googleapis.com/css?family=Lateef&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            font-family: 'Lateef', cursive!important;
+        }
+
+        th {
+            text-align: center !important;
+            border-right: 1px solid rgb(190, 190, 190) !important;
+            border-left: 1px solid rgb(190, 190, 190) !important;
+            border-top: 1px solid rgb(190, 190, 190) !important;
+        }
+
+        td {
+            text-align: center !important;
+            border-right: 1px solid rgb(190, 190, 190) !important;
+            border-left: 1px solid rgb(190, 190, 190) !important;
+        }
+
+        h6 {
+            margin-top: 20px !important;
+        }
+
+        td{
+            padding:0 !important;
+        }
+
+        
+
+        .m-result-row{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .s-result-row{
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        @media print{
+            .noprint{
+                display: none;
+                
+            }
+
+            .noprint .btn{
+                margin:0!important
+            }
+
+            h6{
+                margin-top:15px!important;
+            }
+        }
+
+    </style>
+
+    <% include ./partials/header.ejs %>
+
+
+    <% function getInput(student,col){
+
+        if(student.booklet[col].type == 'number'){
+            return student.booklet[col].value
+        }
+        
+        if(student.booklet[col].type == 'avg'){
+
+            let total = 0
+
+            for(let i=0;i < student.booklet[col].inputColumns.length;i++){
+                total += parseFloat(getInput(student,student.booklet[col].inputColumns[i]))
+            }
+
+            return total/student.booklet[col].inputColumns.length
+        }else if(student.booklet[col].type == 'total'){
+
+            let total = 0
+
+            for(let i=0;i < student.booklet[col].inputColumns.length;i++){
+                total += parseFloat(getInput(student,student.booklet[col].inputColumns[i]))
+            }
+
+            return Math.round(total)
+        }
+    } %>
+
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="row noprint">
+            <button style="margin-top:15px;" id="print-btn" class="btn blue">تصدير كـ pdf</button>
+            <a href="#modal" style="margin-top:15px;margin-right: 10px" class="btn green  waves-effect waves-light btn modal-trigger">أرسال بالبريد</a>
+        
+            <div id="modal" style="direction:rtl" class="modal">
+            <div class="modal-content">
+                <h4>أرسال بالبريد</h4>
+                <form action="/sendpdf" method="post">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input id="email" name="email" autocomplete="off" type="email" class="validate" required>
+                            <label for="email">البريد الألكتروني</label>
+                        </div>
+
+                        <input name="classId" value="<%= userClass.id %>" type="hidden" />
+                    </div>
+
+                    <div class="row">
+                        <button class="btn green">أرسال</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+
+        <div id="print-table">
+            <div class="m-result-row">
+                <h6>سجل درجات التقويم المستمر</h6>
+                
+                <h6>العام الدراسي: <%= user.year %></h6>
+            </div>
+            
+            <div class="row">
+
+                    <div class="s-result-row col s6">
+                            <h6>
+                                    الفصل الدراسي :
+                                    <%= user.class %>
+                                </h6>
+                    
+                                <h6>
+                                    أسم المعلم :
+                                    <%= user.name %>
+                                </h6>
+                    </div>
+                
+                <div class="col s6">
+                        <h6>
+                                أسم الفصل :
+                                <%= userClass.name %>
+                            </h6>
+                
+                            <h6>
+                                أسم المادة :
+                                <%= userClass.subject %>
+                            </h6>
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <table style="direction:ltr;margin-top:20px" id="user-table" class="display right-align">
+                    <thead>
+                        <tr>
+                            <% if(userClass.students.length > 0) { %>
+                            <% Object.keys(userClass.students[0].booklet).reverse().forEach((item)=>{ %>
+                            <th>
+                                <%= userClass.students[0].booklet[item].short %> %>
+                            </th>
+                            <% }) %>
+                            <% } %>
+                            <th>الأسم</th>
+
+                            <th>الرقم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <% let count = 1 %>
+
+                        <% userClass.students.forEach((item)=>{ %>
+                        <tr>
+
+                            <% Object.keys(userClass.students[0].booklet).reverse().forEach((col)=>{ %>
+
+                            <% if(item.booklet[col].type == 'number'){ %>
+                            <% if(item.booklet[col].value == 'none'){ %>
+                            <td>لم يتم الأدخال</td>
+                            <% }else{ %>
+                            <td>
+                                <%= item.booklet[col]['value'] %>
+                            </td>
+                            <% } %>
+                            <% } else{ %>
+
+                            <% let output = getInput(item,col) %>
+
+                            <td>
+                                <%= output %>
+                            </td>
+                            <% } %>
+                            <% }) %>
+
+                            <td>
+                                <%= item.name %>
+                            </td>
+
+                            <td>
+                                    <%= count %>
+                            </td>
+                        </tr>
+
+                        <% count ++ %>
+
+                        <% }) %>
+
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="left-align">
+                المدرسة: <%= user.school %>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+
+<script>
+
+$(document).ready(function () {
+        $('.modal').modal();
+    });
+
+    $('#print-btn').click((e) => {
+        let printContents = document.getElementById('print-table').innerHTML;
+        let originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    })
+</script>
+
+<% if(sent.length > 0) { %>
+
+    <script>
+
+        M.toast({ html: 'تم الأرسال بنجاح' })
+
+    </script>
+
+    <% } %>
+
+    <% if(error.length > 0) { %>
+
+        <script>
+    
+            M.toast({ html: 'حدث خطأ الرجاء المحاولة مرة أخرى' })
+    
+        </script>
+    
+        <% } %>
+
+</html>

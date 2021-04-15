@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>تعديل عمود</title>
+
+    <% include ./partials/header.ejs %>
+
+    <style>
+        body{
+            background: whitesmoke;
+        }
+        .row {
+            margin-top: 20px;
+        }
+
+        .container {
+            margin-top: 7%;
+        }
+
+        .back-btn{
+            margin-left:25px;
+            cursor: pointer;
+        }
+
+        .brand-logo{
+            color:black!important;
+        }
+
+        .dropdown-content li {
+        text-align: center;
+
+    }
+
+    .select-wrapper input.select-dropdown {
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+
+    <nav class="white">
+
+        <div class="nav-wrapper black-text">
+            <a href="#" class="brand-logo center">تعديل عمود</a>
+
+            <div class="left back-btn"><i class="material-icons">arrow_back_ios</i></div>
+        </div>
+
+
+    </nav>
+
+    <div class="container">
+
+        <form id="addcolumnform" method="POST">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" name="name" type="text" disabled value="<%=column.name %>" class="validate" required>
+                    <label for="name"> الأسم</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="short" name="short" type="text" value="<%=column.short %>" class="validate" required>
+                    <label for="short"> الأختصار</label>
+                </div>
+            </div>
+
+            <div class="row">
+                    <div class="input-field col s12">
+                        <input id="value" name="value" type="text" value="<%=column.value %>" class="validate">
+                        <label for="value"> ألدرجة</label>
+                    </div>
+                </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="desc" name="desc" type="text" value="<%= column.desc %>" class="validate" required>
+                    <label for="desc">الوصف</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="type-select" name="type">
+                        <% if(column.type == 'number'){ %>
+                            <option value="number" selected>حقل رقم</option>
+                            <option value="avg">متوسط</option>
+                            <option value="total">مجموع</option>
+                        <% } %>
+
+                        <% if(column.type == 'avg'){ %>
+                        <option value="number">حقل رقم</option>
+                        <option value="avg" selected>متوسط</option>
+                        <option value="total">مجموع</option>
+                        
+                       <% }else if(column.type == 'total'){ %>
+                        <option value="number">حقل رقم</option>
+                        <option value="avg">متوسط</option>
+                        <option value="total" selected>مجموع</option>
+                       <% } %>
+                    </select>
+                    <label>النوع</label>
+                </div>
+
+            </div>
+
+            <input type="hidden" name="classId" value="<%=column.classId %>" />
+            <input type="hidden" name="columnId" value="<%=column.id %>" />
+
+            <% if(column.type == 'avg' || column.type == 'total'){ %>
+                <div id="input-columns" class="row">
+                        <h6>أختار أعمدة الأدخال</h6>
+
+                        <% columns.forEach((item)=>{ %>
+        
+                            <% if(column.name == item.name){ %>
+                                
+                          <%   } 
+                          else if(column.inputColumns.includes(item.name)){ %>
+                            <p>
+        
+                                    <label><input class="filled-in" name="input-columns" checked type="checkbox" /><span><%= item.name %></span></label>
+                
+                                </p>
+                         <% }else{ %>
+                            <p>
+        
+                                    <label><input class="filled-in" name="input-columns" type="checkbox" /><span><%= item.name %></span></label>
+                
+                                </p>
+                        <% }%>
+
+                        <% }) %>
+        
+                        
+        
+                    </div>
+            <% }else{ %>
+                <div style="display:none" id="input-columns" class="row">
+                        <h6>أختار أعمدة الأدخال</h6>
+                        
+        
+                        <% columns.forEach((item)=>{ %>
+
+
+                            <% if(column.name == item.name){ %>
+                                
+                          <%   }else{ %>
+                            <p>
+        
+                                    <label>
+                                        <input class="filled-in" name="input-columns" type="checkbox" />
+                                        <span><%= item.name %></span>
+                                    </label>
+                
+                                </p>
+                         <% } %>
+        
+                            
+                        <% }) %>
+        
+                    </div>
+           <% } %>
+
+
+            <div class="row">
+                <button id="submit-btn" class="btn col s4 offset-s4 c blue">تعديل</button>
+            </div>
+        </form>
+
+    </div>
+
+
+</body>
+
+<script>
+
+    $('.back-btn').click((e) => {
+        let classId = $('input[name="classId"').val();
+        window.location.href = '/managecolumns/' + classId;
+    })
+
+    $('#type-select').on('change', (e) => {
+
+        if ($('#type-select').val() === 'avg' || $('#type-select').val() === 'total') {
+            $('#input-columns').css('display', 'block')
+        } else {
+            $('#input-columns').css('display', 'none')
+        }
+
+
+    })
+
+    $('#addcolumnform').submit((e) => {
+        e.preventDefault();
+
+        $('#submit-btn').attr('disabled','disabled')
+        
+        let name = $('input[name="name"]').val();
+        let short = $('input[name="short"]').val();
+        let desc = $('input[name="desc"]').val();
+        let value = $('input[name="value"]').val();
+        let type = $('#type-select').val()
+        let classId = $('input[name="classId"').val();
+        let columnId = $('input[name="columnId"').val();
+
+        let inputColumns = $('input[type="checkbox"]:checked')
+
+        let checkedColumns = [];
+
+        for (let i = 0; i < inputColumns.length; i++) {
+                checkedColumns.push(inputColumns[i].parentElement.lastElementChild.textContent.trim())
+            }
+        
+        let req = $.post('/editcolumn/'+columnId,{name,short,desc,type,inputColumns:checkedColumns,classId,value})
+
+        req.done((res)=>{
+            if(res === 'done'){
+                window.location.href = '/managecolumns/' + classId
+            }else{
+                M.toast({html: 'العمود موجود مسبقاً الرجاء أضافة أسم أخر'})
+            }
+
+            $('#submit-btn').removeAttr('disabled')
+        })
+    })
+</script>
+
+</html>

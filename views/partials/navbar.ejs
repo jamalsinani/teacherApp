@@ -1,0 +1,76 @@
+<style>
+    .nav-wrapper a {
+        color: black;
+    }
+
+    .nav-wrapper .btn {
+        color: white;
+    }
+
+    .nav-icon{
+        padding:5px;
+        width:40px;
+        height: 40px;
+        border-radius: 40px;
+        display: inline-block;
+        position: relative;
+        top:10px;
+        
+    }
+
+    .book-icon{
+        position: relative;
+        bottom:14px;
+        left:3px;
+    }
+
+</style>
+
+
+<nav class="white">
+    <div class="nav-wrapper container">
+        <a href="/" class="brand-logo right">
+            <div class="nav-icon green">
+                <i class="material-icons white-text book-icon">book</i>
+            </div>
+            <span class="logo-text">سجلاتي</span>
+        </a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+
+            <% if (user) { %>
+                <li>
+                    <img class="mx-auto d-block rounded-circle border border-dark m-2" src='/<%= image %>' style="height: 2.5rem;width: 2.5rem;border-radius: 2rem;margin-top: 0.9rem;">
+                </li>
+                <li><a href="/logout">تسجيل الخروج</a></li>
+                <li><a href="/editteacher">بياناتي</a></li>
+            <li><a href="/classes">الفصول</a></li>
+            <li><a style="text-align:right" href="/">الرئيسية</a></li>
+    
+           <% }else{ %>
+            <li><a href="/login" class="btn green">تسجيل الدخول</a></li>
+            <li><a href="/signup" class="btn light-blue"> تسجيل جديد</a></li>
+           <%} %>
+            
+        </ul>
+
+        <a href="#" data-target="sidebar" class="sidenav-trigger left"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+
+<ul class="sidenav" style="direction:ltr;" id="sidebar">
+    <% if (user) { %>
+        <li><a style="text-align:right" href="/">الرئيسية</a></li>
+        <li><a style="text-align:right" href="/classes">الفصول</a></li>
+        <li><a style="text-align:right" href="/logout">تسجيل الخروج</a></li>
+
+   <% }else{ %>
+    <li><a style="text-align:right" href="/login" >تسجيل الدخول</a></li>
+    <li><a style="text-align:right" href="/signup">تسجيل جديد</a></li>
+   <%} %>
+  </ul>
+
+  <script>
+        $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+  </script>

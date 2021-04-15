@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>تعديل بيانات المعلم</title>
+
+    <% include ./partials/header.ejs %>
+
+    <style>
+        body{
+            background: whitesmoke;
+        }
+        .row {
+            margin-top: 20px;
+        }
+
+        .container {
+            margin-top: 7%;
+        }
+
+        .back-btn{
+            margin-left:25px;
+            cursor: pointer;
+        }
+
+        .brand-logo{
+            color:black!important;
+        }
+
+        .dropdown-content li {
+        text-align: center;
+
+    }
+
+    .select-wrapper input.select-dropdown {
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+
+    <nav class="white">
+
+        <div class="nav-wrapper black-text">
+            <a href="#" class="brand-logo center">
+             تعديل بيانات المعلم</a>
+
+            <div class="left back-btn"><i class="material-icons">arrow_back_ios</i></div>
+        </div>
+
+
+    </nav>
+
+    <div class="container">
+
+        <form id="addcolumnform" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" name="name" type="text" value="<%=user.name %>" class="validate"
+                        required>
+                    <label for="name"> الأسم</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="school" name="school" type="text" value="<%=user.school %>" class="validate"
+                        required>
+                    <label for="school"> المدرسة</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="email" name="email" type="email" value="<%=user.email %>" class="validate"
+                        required>
+                    <label for="email"> البريد الالكتروني</label>
+                </div>
+            </div>
+            <div class="row">
+                <label for="image"> الصورة الشخصية</label>
+                <div class="input-field col s12">
+                        <input type="file" class="form-control mt-3" name="image" placeholder="Image" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="type-select" name="year">
+                        <% for(let year= new Date().getFullYear();year <= new Date().getFullYear()+5;year++){ %>
+                            <% if(user.year == year.toString() + '-' + (year +1).toString() ){ %>
+                                <option value="<%= year.toString() + '-' + (year +1).toString() %>" selected><%= year.toString() + '-' + (year +1).toString() %></option>
+                            <% } else{%>
+                                <option value="<%= year.toString() + '-' + (year +1).toString() %>"><%= year.toString() + '-' + (year +1).toString() %></option>
+                           <% } %>
+                        <% } %>
+                    </select>
+                    <label>السنة الدراسية</label>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="type-select" name="class">
+                        
+                            <% if(user.class == 'الفصل الأول' || !user.class ){ %>
+                                <option value="الفصل الأول" selected>الفصل الأول</option>
+                                <option value="الفصل الثاني">الفصل الثاني</option>
+                            <% } else{%>
+                                <option value="الفصل الأول">الفصل الأول</option>
+                                <option value="الفصل الثاني" selected>الفصل الثاني</option>
+                           <% } %>
+
+                    </select>
+                    <label>الفصل الدراسي</label>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <button class="btn col s4 offset-s4 c blue">حفظ</button>
+            </div>
+        </form>
+
+    </div>
+
+
+</body>
+
+<script>
+
+    $('.back-btn').click((e) => {
+        window.location.href = '/';
+    })
+
+</script>
+
+<% if(updated.length > 0) { %>
+
+    <script>
+
+        M.toast({ html: 'تم التحديث' })
+
+    </script>
+
+    <% } %>
+
+</html>
