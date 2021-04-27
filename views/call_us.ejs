@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>اتصل بنا</title>
+
+    <% include ./partials/header.ejs %>
+
+    <style>
+
+        .holder-container{
+            background: white;
+            padding:25px;
+            margin-top: 25px;
+        }
+        .con-text {
+            text-align: center;
+        }
+        .con-text i {
+            font-size: 18rem;
+            margin-right: 12rem;
+            margin-top: 2rem;
+        }
+        .form-container {
+            background-color: #fff;
+            padding-left: 35px;
+            padding-right: 35px;
+            padding-top: 35px;
+            padding-bottom: 50px;
+            width: 70rem;
+            float: left;
+            position: absolute;
+            margin-top: 22px;
+            margin-left: -260px;
+            -webkit-border-radius: 7px;
+            box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+            text-align: center;
+            display: flex;
+        }
+        .form-container .send-mail {
+            margin-right: 6rem;
+            margin-top: 6rem;
+        }
+        .send-mail .inp {
+            border: 1px solid #26a69a;
+            border-radius: 1rem;
+            padding-right: 5px;
+            background-color: #fff;
+            width: 22rem;
+        }
+        .btn-send {
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border-radius: 2rem;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            width: 10rem;
+            height: 3rem;
+            font-size: 1.2rem;
+            font-weight: bolder;
+        }
+        .btn-send:hover {
+            background-color: #59c95c;
+        }
+        .call-text {
+            background-color: #4CAF50;
+            width: 70rem;
+            padding: 0.3rem;
+            margin-top: 0.8rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+        .suc {
+            background-color: rgba(46, 239, 127, 0.6);
+            padding: 0.1rem;
+            margin-top: 0.5rem;
+            border-radius: 1rem;
+        }
+        .err {
+            background-color: rgba(240, 3, 3, 0.6);
+            padding: 0.1rem;
+            margin-top: 0.5rem;
+            border-radius: 1rem;
+        }
+        ::placeholder {
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <% include ./partials/navbar.ejs %>
+    
+    <div class="container">
+        <div class="call-text">
+            <h3 style="
+            font-weight: bolder;
+            margin-bottom: 2rem;
+        ">تواصل معنا</h3>
+        </div>
+        <div class="form-container">
+            <form class="send-mail" method="POST">
+                <input type="text" id="name" placeholder="الاسم" style="
+                border: 1px solid #b0a2a2;
+                background-color: rgba(46, 239, 127, 0.6);
+                width: 22rem;
+                border-radius: 2rem;
+                padding-right: 1rem;
+            "> <br>
+                <input type="email" id="email" placeholder="البريد الالكتروني" style="
+                border: 1px solid #b0a2a2;
+                background-color: rgba(46, 239, 127, 0.6);
+                width: 22rem;
+                border-radius: 2rem;
+                padding-right: 1rem;
+            "> <br>
+                <input type="text" id="subject" placeholder="عنوان الرسالة" style="
+                border: 1px solid #b0a2a2;
+                background-color: rgba(46, 239, 127, 0.6);
+                width: 22rem;
+                border-radius: 2rem;
+                padding-right: 1rem;
+            "> <br>
+                <textarea name="text" id="text" cols="30" rows="10" style="height: 7rem;border-radius: 1rem;padding: 0.5rem; background-color: rgba(46, 239, 127, 0.6);" placeholder="الرسالة"></textarea> <br>
+                <button type="submit" value="submit" class="btn-send">ارسال</button>
+                <% if(msgsend) { %>
+                <div class="suc">
+                    <p>
+                        تم ارسال الرسالة
+                    </p>
+                </div>
+                <% } %>
+                <% if(msgerr) { %>
+                <div class="err">
+                    <p>
+                        هناك خطأ برجاء التأكد من المعلومات
+                    </p>
+                </div>
+                <% } %>
+            </form>
+            <div class="con-text">
+                <h6 style="
+                margin-right: 8rem;
+                margin-top: 2rem;
+            ">
+                    يمكنك التواصل معنا .. ونسعد بآرائكم 
+                    <br>
+                    مؤكدين حرصنا التام الرد على استفساراتكم
+                </h6>
+                <img src="556666619949e-447a-4ba2-8384-0a54cb4f0cf7.png" style="width: 25rem;margin-right: 7rem;margin-top: 4rem;">
+            </div>
+        </div>
+        
+   
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $('form').on("submit", (e) => {
+            // e.preventDefault();
+
+            const email = $('#email').val().trim();
+            const subject = $('#subject').val().trim();
+            const text = $('#text').val().trim();
+
+            const data = {
+                email,
+                subject,
+                text
+            };
+
+            $.post('/callUs', data, function() {
+                console.log('Server recieved our data');
+            });
+        })
+    </script>
+</body>
+
+</html>

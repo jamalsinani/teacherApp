@@ -13,6 +13,7 @@ const uid = require('uid');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const path =  require('path');
+const sendMail = require('./mail');
 
 //models 
 const User = require('./models/user');
@@ -53,6 +54,12 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public/'));
 app.use(express.static(path.join(__dirname, 'images')));
+
+// Data Parsing
+app.use(express.urlencoded({
+    extended: false
+}));
+app.use(express.json());
 
 //passport setup
 app.use(session({
@@ -171,6 +178,45 @@ app.get('/', async (req, res) => {
         res.render('index', { user: (req.isAuthenticated() ? req.user : false), image: user.image });
     }
 });
+
+app.get('/succsse', async (req, res) => {
+    res.render('succsse');
+})
+
+app.get('/callUs', async (req, res) => {
+    if( req.user === undefined) {
+        res.render('call_us', { 
+            user: (req.isAuthenticated() ? req.user : false),
+            msgsend: req.flash('sended')[0], 
+            msgerr: req.flash('err')[0]
+        });
+    } else {
+        const user = await User.findById(req.user._id);
+        
+        res.render('call_us', { 
+            user: (req.isAuthenticated() ? req.user : false),
+            image: user.image,
+            msgsend: req.flash('sended')[0],
+            msgerr: req.flash('err')[0],
+        });
+    }
+    
+});
+
+app.post('/callUs', async (req, res) => {
+    // TODO
+    // send Email
+    const { email, subject, text } = req.body;
+    await sendMail(email, subject, text, (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('Send Message');
+        }
+    });
+    req.flash('sended', true);
+    res.redirect('/callUs');
+})
 
 app.get('/classes', isLoggedIn, async (req, res) => {
     const user = await User.findById(req.user._id);
