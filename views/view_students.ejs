@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>
+    <title> سجلاتي :
         <%= userClass.name %> -
         <%= userClass.subject %>
     </title>
@@ -108,26 +108,27 @@
 <body>
 
     <div class="container">
-
+    
         <div class="row noprint">
+            <a  style="margin-top:15px;margin-right: 10px;color:plack" href="/class/<%= userClass.id %>" class="btn maroon">رجوع</a>
             <button style="margin-top:15px;" id="print-btn" class="btn blue">تصدير كـ pdf</button>
-            <a href="#modal" style="margin-top:15px;margin-right: 10px" class="btn green  waves-effect waves-light btn modal-trigger">أرسال بالبريد</a>
+            <a href="#modal" style="margin-top:15px;margin-right: 10px" class="btn green  waves-effect waves-light btn modal-trigger">إرسال بالبريد</a>
         
             <div id="modal" style="direction:rtl" class="modal">
             <div class="modal-content">
-                <h4>أرسال بالبريد</h4>
+                <h4>إرسال بالبريد</h4>
                 <form action="/sendpdf" method="post">
                     <div class="row">
-                        <div class="input-field col s12">
+                        <div style="font_size:25px;" class="input-field col s12">
                             <input id="email" name="email" autocomplete="off" type="email" class="validate" required>
-                            <label for="email">البريد الألكتروني</label>
+                            <label for="email">البريد الالكتروني</label>
                         </div>
 
                         <input name="classId" value="<%= userClass.id %>" type="hidden" />
                     </div>
 
                     <div class="row">
-                        <button class="btn green">أرسال</button>
+                        <button class="btn green">إرسال</button>
                     </div>
                 </form>
             </div>
@@ -150,19 +151,19 @@
                                 </h6>
                     
                                 <h6>
-                                    أسم المعلم :
+                                    إسم المعلم :
                                     <%= user.name %>
                                 </h6>
                     </div>
                 
                 <div class="col s6">
                         <h6>
-                                أسم الفصل :
+                                إسم الفصل :
                                 <%= userClass.name %>
                             </h6>
                 
                             <h6>
-                                أسم المادة :
+                                إسم المادة :
                                 <%= userClass.subject %>
                             </h6>
                 </div>
@@ -181,7 +182,7 @@
                             </th>
                             <% }) %>
                             <% } %>
-                            <th>الأسم</th>
+                            <th>الإسم</th>
 
                             <th>الرقم</th>
                         </tr>
@@ -197,10 +198,10 @@
 
                             <% if(item.booklet[col].type == 'number'){ %>
                             <% if(item.booklet[col].value == 'none'){ %>
-                            <td>لم يتم الأدخال</td>
+                            <td>لم يتم الادخال</td>
                             <% }else{ %>
                             <td>
-                                <%= item.booklet[col]['value'] %>
+                                 <%= item.booklet[col]['value'] %>
                             </td>
                             <% } %>
                             <% } else{ %>
@@ -263,7 +264,7 @@ $(document).ready(function () {
 
     <script>
 
-        M.toast({ html: 'تم الأرسال بنجاح' })
+        M.toast({ html: 'تم الارسال بنجاح' })
 
     </script>
 

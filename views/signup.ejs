@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
+    <title>سجلاتي - تسجيل جديد</title>
 
+    
     <style>
 
         .alert-message{
@@ -25,27 +26,28 @@
     
     </style>
 
-    <% include ./partials/header.ejs %>
+     <% include ./partials/header.ejs %>
 </head>
 
 <body>
-
+ 
+   
     <div class="container z-depth-2 login-container">
         <form class="col s12" action="/signup" method="POST">
 
-            <h4 class="right-align">تسجيل حساب جديد</h4>
+            <h4 class="center-align">تسجيل حساب جديد</h4>
 
             <div class="row">
                 <div class="input-field col s12">
                     <input style="direction:rtl;" id="username" name="username" type="text" class="validate" required>
-                    <label for="username"> أسم المستخدم</label>
+                    <label for="username"> اسم المستخدم</label>
                 </div>
             </div>
 
             <div class="row">
                 <div class="input-field col s12">
                     <input id="email" name="email" type="email" class="validate">
-                    <label for="email">البريد الألكتروني</label>
+                    <label for="email">البريد الالكتروني</label>
                 </div>
             </div>
 
@@ -71,6 +73,9 @@
                 <div class="input-field col s12">
                     <button type="submit" style="width:100%" class="btn btn-block green"> تسجيل </button>
                 </div>
+                <div class="right-align" class="row">
+                <a href="/login">لديك حساب سابقا</a>
+            </div>
             </div>
 
         </form>

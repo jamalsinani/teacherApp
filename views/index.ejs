@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>الرئيسية</title>
+    <title>الرئيسية- <%= user.username %></title>
 
     <% include ./partials/header.ejs %>
 
@@ -112,12 +112,12 @@
             <!-- <div class="holder-title">فديو تعاريفي</div> -->
             <div class="gif-holder">
                 <div class="">
-                    <img class="intro-gif" src="https://i.gifer.com/1pIe.gif" />
+                    <img class="intro-gif" src="https://i.gifer.com/1pIe.gif" /> 
                 </div>
             </div>
 
             <% if(user) { %>
-                <div style="margin-top:10px;text-align: center;font-size:19px"><b>مرحباً, </b> أستاذ <%= user.username %></div>
+                <div style="margin-top:10px;text-align: center;font-size:19px"><b>مرحباً, </b> أستاذ <%= user.name %></div>
                 <div class="hello-msg-holder">
                     <div style="flex:1"></div>
                     <div class="hello-msg"></div>
@@ -174,8 +174,6 @@
             </div>
         </div>
     </div>
-
-    <% include ./partials/footer.ejs %>
 </body>
 
 </html>

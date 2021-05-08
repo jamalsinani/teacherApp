@@ -24,41 +24,6 @@
         left:3px;
     }
 
-    #sidebar {
-        position: absolute;
-        width: 0;
-        height: 100%;
-    }
-    
-    #menue {
-        list-style: none;
-        color: #fff;
-        text-align: center;
-        visibility: hidden;
-        margin-top: -0.8rem;
-    }
-
-    #menue i {
-        margin-left: 0.5rem;
-    }
-
-    #sidebar ul li a {
-        width: 8rem;
-        height: 2.8rem;
-        background-color: #fff;
-        display: flex;
-    }
-
-    #sidebar ul li a:hover {
-        background-color: #000;
-        color: #fff;
-    }
-    .m-fadeOut {
-        visibility: visible;
-        opacity: 0;
-        transition: visibility 0s linear 300ms, opacity 300ms;
-    }
-
 </style>
 
 
@@ -74,20 +39,12 @@
 
             <% if (user) { %>
                 <li>
-                    <div id="sidebar">
-                        <div id="tog" class="toggel-btn" style="margin-right: -2.4rem;">
-                            <img class="mx-auto d-block rounded-circle border border-dark m-2" src='/<%= image %>' style="height: 2.5rem;width: 2.5rem;border-radius: 2rem;margin-top: 0.9rem;">
-                        </div>
-                        <ul id="menue">
-                            <li><a href="/editteacher"><i class="material-icons">person</i><%= username %></a></li>
-                            <li><a href="/editteacher"><i class="material-icons">settings</i>بياناتي</a></li>
-                            <li><a href="/classes"><i class="material-icons">class</i>الفصول</a></li>
-                            <li><a href="/logout"><i class="material-icons">logout</i>خروج</a></li>
-                        </ul>
-                    </div>
+                    <img class="mx-auto d-block rounded-circle border border-dark m-2" src='/<%= image %>' style="height: 2.5rem;width: 2.5rem;border-radius: 2rem;margin-top: 0.9rem;">
                 </li>
-                <li style="margin-left: 3rem;"><a href="/callUs">اتصل بنا</a></li>
-                
+                <li><a href="/callUs">اتصل بنا</a></li>
+                <li><a href="/logout">تسجيل الخروج</a></li>
+                <li><a href="/editteacher">بياناتي</a></li>
+            <li><a href="/classes">الفصول</a></li>
             <li><a style="text-align:right" href="/">الرئيسية</a></li>
     
            <% }else{ %>
@@ -106,11 +63,13 @@
     <% if (user) { %>
         <li><a style="text-align:right" href="/">الرئيسية</a></li>
         <li><a style="text-align:right" href="/classes">الفصول</a></li>
+         <li><a style="text-align:right" href="/editteacher">بياناتي</a></li>
         <li><a style="text-align:right" href="/logout">تسجيل الخروج</a></li>
 
    <% }else{ %>
     <li><a style="text-align:right" href="/login" >تسجيل الدخول</a></li>
     <li><a style="text-align:right" href="/signup">تسجيل جديد</a></li>
+    <li><a style="text-align:right" href="/callUs">اتصل بنا</a></li>
    <%} %>
   </ul>
 
@@ -118,12 +77,4 @@
         $(document).ready(function(){
     $('.sidenav').sidenav();
   });
-
-  const tog = document.getElementById("tog");
-  const menue = document.getElementById('menue');
-  tog.addEventListener("click", function() {
-  
-    menue.style.visibility = "visible";
-    menue.classList.toggle("m-fadeOut");
-    });
   </script>

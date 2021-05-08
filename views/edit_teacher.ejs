@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>تعديل بيانات المعلم</title>
+    <title>سجلاتي - تعديل بيانات المعلم</title>
 
     <% include ./partials/header.ejs %>
 
@@ -62,7 +62,7 @@
                 <div class="input-field col s12">
                     <input id="name" name="name" type="text" value="<%=user.name %>" class="validate"
                         required>
-                    <label for="name"> الأسم</label>
+                    <label for="name"> الاسم</label>
                 </div>
             </div>
 
@@ -92,10 +92,10 @@
                 <div class="input-field col s12">
                     <select id="type-select" name="year">
                         <% for(let year= new Date().getFullYear();year <= new Date().getFullYear()+5;year++){ %>
-                            <% if(user.year == year.toString() + '-' + (year +1).toString() ){ %>
-                                <option value="<%= year.toString() + '-' + (year +1).toString() %>" selected><%= year.toString() + '-' + (year -1).toString() %></option>
+                            <% if(user.year == year.toString() + '-' + (year -1).toString() ){ %>
+                                <option value="<%= year.toString() + '-' + (year -1).toString() %>" selected><%= year.toString() + '-' + (year -1).toString() %></option>
                             <% } else{%>
-                                <option value="<%= year.toString() + '-' + (year +1).toString() %>"><%= year.toString() + '-' + (year -1).toString() %></option>
+                                <option value="<%= year.toString() + '-' + (year -1).toString() %>"><%= year.toString() + '-' + (year -1).toString() %></option>
                            <% } %>
                         <% } %>
                     </select>
@@ -129,7 +129,7 @@
 
     </div>
 
-    <% include ./partials/footer.ejs %>
+
 </body>
 
 <script>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>الفصول</title>
+    <title>سجلاتي - الفصول</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <% include ./partials/header.ejs %>
@@ -52,11 +52,6 @@
                 flex-basis: 100%;
             }
         }
-        .footer {
-            position:absolute;
-            bottom:0;
-            width:100%;
-        }
     </style>
 </head>
 
@@ -66,22 +61,22 @@
     <div class="container">
 
         <div class="row">
-            <h5>مرحباً أستاذ,
+            <h5 style="text-align: center ; color:green" >مرحباً أستاذ,
                 <%= user.username %>
             </h5>
+         
         </div>
         <div class="row">
             <a href="#modal" class="btn green col waves-effect waves-light btn modal-trigger"><i class="material-icons">add</i><span
-                    style="position: relative;bottom: 5px">أضافة
-                    فصل</span></a>
+                    style="position: relative;bottom: 5px">إضافة فصل</span></a>
             <div id="modal" style="direction:rtl" class="modal">
                 <div class="modal-content">
-                    <h4>أضافة فصل</h4>
+                    <h4 style="text-align: center">إضافة فصل</h4>
                     <form action="/addclass" method="post">
                         <div class="row">
                             <div class="input-field col s12">
                                 <input id="name" name="name" autocomplete="off" type="text" class="validate" required>
-                                <label for="name">أسم الفصل</label>
+                                <label for="name">اسم الفصل</label>
                             </div>
                         </div>
 
@@ -95,7 +90,7 @@
 
 
                         <div class="row">
-                            <button class="btn green">أضافة</button>
+                            <button style="align: center" class="btn green">إضافة</button>
                         </div>
                     </form>
                 </div>
@@ -127,7 +122,7 @@
             
                             <div style="display:flex;justify-content:center">
                                 <a href="/deleteclass/<%= item.id %>" style="margin:5px" class="btn red">تأكيد</a>
-                                <a href="#classModal" style="margin:5px" class="btn green modal-action modal-close">العاء</a>
+                                <a href="#classModal" style="margin:5px" class="btn green modal-action modal-close">الغـاء</a>
                             </div>
                         </div>
                     </div>
@@ -146,7 +141,6 @@
 
         </div>
     </div>
-    <% include ./partials/footer.ejs %>
 </body>
 <script>
     $(document).ready(function () {
