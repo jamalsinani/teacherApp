@@ -93,9 +93,9 @@
                     <select id="type-select" name="year">
                         <% for(let year= new Date().getFullYear();year <= new Date().getFullYear()+5;year++){ %>
                             <% if(user.year == year.toString() + '-' + (year +1).toString() ){ %>
-                                <option value="<%= year.toString() + '-' + (year +1).toString() %>" selected><%= year.toString() + '-' + (year +1).toString() %></option>
+                                <option value="<%= year.toString() + '-' + (year +1).toString() %>" selected><%= year.toString() + '-' + (year -1).toString() %></option>
                             <% } else{%>
-                                <option value="<%= year.toString() + '-' + (year +1).toString() %>"><%= year.toString() + '-' + (year +1).toString() %></option>
+                                <option value="<%= year.toString() + '-' + (year +1).toString() %>"><%= year.toString() + '-' + (year -1).toString() %></option>
                            <% } %>
                         <% } %>
                     </select>
@@ -129,7 +129,7 @@
 
     </div>
 
-
+    <% include ./partials/footer.ejs %>
 </body>
 
 <script>

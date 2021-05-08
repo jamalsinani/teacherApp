@@ -175,7 +175,7 @@ app.get('/', async (req, res) => {
         res.render('index', { user: (req.isAuthenticated() ? req.user : false) });
     } else {
         const user = await User.findById(req.user._id);
-        res.render('index', { user: (req.isAuthenticated() ? req.user : false), image: user.image });
+        res.render('index', { user: (req.isAuthenticated() ? req.user : false), image: user.image, username: user.username });
     }
 });
 
@@ -198,14 +198,13 @@ app.get('/callUs', async (req, res) => {
             image: user.image,
             msgsend: req.flash('sended')[0],
             msgerr: req.flash('err')[0],
+            username: user.username
         });
     }
     
 });
 
 app.post('/callUs', async (req, res) => {
-    // TODO
-    // send Email
     const { email, subject, text } = req.body;
     await sendMail(email, subject, text, (err, data) => {
         if (err) {
@@ -221,7 +220,7 @@ app.post('/callUs', async (req, res) => {
 app.get('/classes', isLoggedIn, async (req, res) => {
     const user = await User.findById(req.user._id);
     let classes = await UserClass.find({ userId: req.user._id })
-    res.render('classes', { user: req.user, classes ,updated:req.flash('updated'), image: user.image});
+    res.render('classes', { user: req.user, classes ,updated:req.flash('updated'), image: user.image, username: user.username});
 })
 
 app.post('/addclass', isLoggedIn, async (req, res) => {
@@ -246,7 +245,7 @@ app.get('/class/:id', isLoggedIn, async (req, res) => {
         res.send('access denied')
     }
 
-    res.render('class', { user: req.user, userClass, updated: req.flash('updated'), image: user.image })
+    res.render('class', { user: req.user, userClass, updated: req.flash('updated'), image: user.image, username: user.username })
 })
 
 app.get('/managecolumns/:id', isLoggedIn, async (req, res) => {
@@ -255,14 +254,14 @@ app.get('/managecolumns/:id', isLoggedIn, async (req, res) => {
 
     let userClass = await UserClass.findById(req.params.id);
 
-    res.render('manage_columns', { columns, user: req.user, userClass, updated: req.flash('updated'), image: user.image });
+    res.render('manage_columns', { columns, user: req.user, userClass, updated: req.flash('updated'), image: user.image, username: user.username });
 })
 
 app.get('/addcolumn/:id', isLoggedIn, async (req, res) => {
     const user = await User.findById(req.user._id);
     let columns = await Column.find({ classId: req.params.id });
 
-    res.render('add_column', { user: req.user, classId: req.params.id, columns, image: user.image })
+    res.render('add_column', { user: req.user, classId: req.params.id, columns, image: user.image, username: user.username })
 })
 
 app.post('/addcolumn/', async (req, res) => {
@@ -316,7 +315,7 @@ app.get('/editcolumn/:classId/:id', isLoggedIn, async (req, res) => {
     let column = await Column.findById(req.params.id);
     let columns = await Column.find({classId:req.params.classId})
 
-    res.render('edit_column', { user: req.user, column, columns, image: user.image })
+    res.render('edit_column', { user: req.user, column, columns, image: user.image, username: user.username })
 })
 
 app.post('/editcolumn/:id', async (req, res) => {
@@ -359,7 +358,7 @@ app.get('/deletecolumn/:classId/:id', isLoggedIn, async (req, res) => {
 
 app.get('/addstudents/:id', isLoggedIn, async (req, res) => {
     const user = await User.findById(req.user._id);
-    res.render('add_students', { user: req.user, classId: req.params.id, image: user.image })
+    res.render('add_students', { user: req.user, classId: req.params.id, image: user.image, username: user.username })
 })
 
 app.post('/addstudents/:id', isLoggedIn, async (req, res) => {
@@ -417,7 +416,7 @@ app.get('/editstudent/:classId/:id', isLoggedIn, async (req, res) => {
         return res.send('not found')
     }
 
-    res.render('edit_student', { user: req.user, student, classId: userClass._id, image: user.image })
+    res.render('edit_student', { user: req.user, student, classId: userClass._id, image: user.image, username: user.username })
 })
 
 // Save All Data
@@ -471,23 +470,18 @@ app.post('/editstudent/:classId/:id', isLoggedIn, async (req, res) => {
     Object.keys(data).forEach((item) => {
 
         if (item != 'name') {
-            // Item = Coulm Name
             booklet[item] = data[item]
         }
     })
-    
-    // Get All Data
-    let userClass = await UserClass.findById(req.params.classId);
-    
+
+    let userClass = await UserClass.findById(req.params.classId)
 
     let students = userClass.students
-    
-    // Get Spichal Student
-    students[req.params.id].name = data.name;
-    
+
+    students[req.params.id].name = data.name
+
     Object.keys(booklet).forEach((item) => {
-        
-        
+
         students[req.params.id].booklet[item].value = booklet[item]
     })
 
@@ -531,13 +525,13 @@ app.get('/viewstudents/:id',isLoggedIn, async (req, res) => {
         res.send('access denied')
     }
 
-    res.render('view_students', { user: req.user, userClass,sent:req.flash('sent'),error:req.flash('error'), image: user.image })
+    res.render('view_students', { user: req.user, userClass,sent:req.flash('sent'),error:req.flash('error'), image: user.image, username: user.username })
 })
 
 app.get('/editteacher',isLoggedIn,async(req,res)=>{
     const user = await User.findById(req.user._id);
 
-    res.render('edit_teacher',{user:req.user,updated:req.flash('updated'), image: user.image})
+    res.render('edit_teacher',{user:req.user,updated:req.flash('updated'), image: user.image, username: user.username})
 })
 
 app.post('/editteacher',isLoggedIn,multer({
