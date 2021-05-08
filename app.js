@@ -558,7 +558,7 @@ app.post('/editteacher',isLoggedIn,multer({
 
     req.flash('updated','updated')
 
-    res.redirect('/')
+    res.redirect('back')
 })
 
 app.post('/sendpdf',async(req,res)=>{
