@@ -247,6 +247,17 @@ app.get('/class/:id', isLoggedIn, async (req, res) => {
     }
 
     res.render('class', { user: req.user, userClass, updated: req.flash('updated'), image: user.image })
+});
+
+app.get('/userlist', isLoggedIn, async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.render('userlist', {
+            users: users
+        })
+    } catch (error) {
+        
+    }
 })
 
 app.get('/managecolumns/:id', isLoggedIn, async (req, res) => {
