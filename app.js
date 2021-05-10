@@ -13,7 +13,8 @@ const uid = require('uid');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const path =  require('path');
-const sendMail = require('./mail');
+const sendMailCallUs = require('./mail');
+
 
 //models 
 const User = require('./models/user');
@@ -40,7 +41,7 @@ app.use(session({
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-           user: 'sejlaty.app@gmail.com',
+           user: 'sejlaty2.app@gmail.com',
            pass: 'pass@211'
        }
    });
@@ -207,7 +208,7 @@ app.post('/callUs', async (req, res) => {
     // TODO
     // send Email
     const { email, subject, text } = req.body;
-    await sendMail(email, subject, text, (err, data) => {
+    await sendMailCallUs(email, subject, text, (err, data) => {
         if (err) {
             console.log(err);
         } else {
@@ -583,10 +584,10 @@ app.post('/sendpdf',async(req,res)=>{
 
     let url = 'http://localhost:3000/viewstudents/' + userClass._id
 
-    await printPDF(url,filePath,req.get('Cookie'))
+    await printPDF(url,filePath,req.get('Cookie'));
 
     const mailOptions = {
-        from: 'sejlaty.app@gmail.com', // sender address
+        from: 'jasinani@gmail.com', // sender address
         to: req.body.email, // list of receivers
         subject: `نتيجة الفصل: ${userClass.name} - المادة: ${userClass.subject}`, // Subject line
         html: `<h4 style="font-size:24px;color:black">لتحميل سجل درجات الفصل ${userClass.name} يرجاء الضغط <a href="http://sejlaty.com/getresult/${filePath}">هنا</a></h4>`// plain text body
@@ -606,7 +607,7 @@ app.post('/sendpdf',async(req,res)=>{
 
      
 
-})
+});
 
 app.get('/getresult/tmp/:filename',(req,res)=>{
     res.sendFile(__dirname + `/tmp/${req.params.filename}`)

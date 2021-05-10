@@ -61,7 +61,7 @@
                     </thead>
                     <tbody>
                         
-                            <% columns.forEach((item)=>{ %>
+                            <% columns.forEach((item, index)=>{ %>
                                 <tr>
                                     <td>
                                         <a href="#<%= item.id %>" class="btn red modal-trigger">حذف</a>
@@ -97,6 +97,7 @@
                                     <td>حقل رقم</td>
                                     <% } %>
                                     <td><%= item.name %></td>
+                                    <td><h6><%= index + 1 %></h6></td>
                                 </tr>
         
                            <% }) %>
